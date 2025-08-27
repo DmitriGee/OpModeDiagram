@@ -29,10 +29,10 @@
 
 package org.firstinspires.ftc.teamcode;
 
-import com.arcrobotics.ftclib.controller.PIDController;
 import com.arcrobotics.ftclib.drivebase.MecanumDrive;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.Servo;
 
 @TeleOp(name="[DG] ClassDiagramOpMode", group="Linear OpMode")
@@ -49,10 +49,9 @@ public class ClassDiagramOpMode extends com.qualcomm.robotcore.eventloop.opmode.
     private final Servo clawServo = hardwareMap.get(Servo.class, "clawServo");
 
     // BEGIN Software Definitions
-    private final PIDController zSlideMotorPID = new PIDController(0, 0, 0);
     private final MecanumDrive mecanum = new MecanumDrive(FLMotor, FRMotor, RLMotor, RRMotor);
     private final XArm xArm = new XArm(XSlideMotor);
-    private final ZArm zArm = new ZArm(ZSlideMotor, zSlideMotorPID);
+    private final ZArm zArm = new ZArm(ZSlideMotor);
     private final Claw claw = new Claw(wristServo, clawServo);
 
     // BEGIN Code
@@ -62,7 +61,7 @@ public class ClassDiagramOpMode extends com.qualcomm.robotcore.eventloop.opmode.
         waitForStart();
 
         while (opModeIsActive()) {
-
+            // code here
             telemetry.addData("Info", "No Telemetry Data Available");
             telemetry.update();
         }

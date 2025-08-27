@@ -2,26 +2,28 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.Servo;
 
-public class Claw {
-    private Servo wristServo;
-    private Servo clawServo;
 
-    public double WRIST_MAX_POS;
-    public double WRIST_MIN_POS;
-    public double CLAW_OPEN_POS;
-    public double CLAW_CLOSED_POS;
+public class Claw {
+    public static final double WRIST_MAX_POS = 0.8;
+    public static final double WRIST_MIN_POS = -0.5;
+    public static final double CLAW_OPEN_POS = 0.5;
+    public static final double CLAW_CLOSED_POS = 0.1;
+
+    private final Servo wristServo;
+    private final Servo clawServo;
+
+    Helpers helpers = new Helpers();
 
     public Claw(Servo wristServo, Servo clawServo) {
         this.wristServo = wristServo;
         this.clawServo = clawServo;
-        // code
     }
 
     public void setWristPos(double pos) {
-        // code
+        this.wristServo.setPosition(helpers.limit(pos, WRIST_MIN_POS, WRIST_MAX_POS));
     }
 
     public void setClawPos(double pos) {
-        // code
+        this.clawServo.setPosition(helpers.limit(pos, CLAW_CLOSED_POS, CLAW_OPEN_POS));
     }
 }

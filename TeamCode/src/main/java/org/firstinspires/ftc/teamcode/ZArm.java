@@ -4,24 +4,30 @@ import com.arcrobotics.ftclib.controller.PIDController;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 
 public class ZArm {
-    private Motor slideMotor;
-    private PIDController slideMotorPID;
+    public static final double MAX_POS = 4.0;
+    public static final double MIN_POS = 0.0;
+    public static final double PID_P = 0.001;
+    public static final double PID_I = 0.0001;
+    public static final double PID_D = 0.004;
 
-    public double MAX_POS;
-    public double MIN_POS;
-    public double FORWARD_MAX_POWER;
+    private final Motor slideMotor;
+    private final PIDController slideMotorPID = new PIDController(PID_P, PID_I, PID_D);
 
-    public ZArm(Motor slideMotor, PIDController slideMotorPID) {
-        this.slideMotor = slideMotor;
-        this.slideMotorPID = slideMotorPID;
-        // code
+    Helpers helpers = new Helpers();
+
+    public ZArm(Motor motor) {
+        slideMotor = motor;
+        slideMotor.setRunMode(Motor.RunMode.RawPower);
+        slideMotor.resetEncoder();
     }
 
-    public void setPosition(double pwr) {
-        // code
+    public void setPosition(double pos) {
+        slideMotorPID.setSetPoint(helpers.limit(pos, MIN_POS, MAX_POS));
     }
 
     public void tickPID() {
-        // code
+        double currentPos = slideMotor.getCurrentPosition();
+        double output = helpers.limit(slideMotorPID.calculate(currentPos), -1.0, 1.0);
+        slideMotor.set(output);
     }
 }
