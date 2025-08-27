@@ -29,45 +29,39 @@
 
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import com.arcrobotics.ftclib.controller.PIDController;
+import com.arcrobotics.ftclib.drivebase.MecanumDrive;
+import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.hardware.TouchSensor;
-import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Range;
 
+@TeleOp(name="[DG] ClassDiagramOpMode", group="Linear OpMode")
+public class ClassDiagramOpMode extends com.qualcomm.robotcore.eventloop.opmode.LinearOpMode {
 
-/*
- * This file contains an minimal example of a Linear "OpMode". An OpMode is a 'program' that runs in either
- * the autonomous or the teleop period of an FTC match. The names of OpModes appear on the menu
- * of the FTC Driver Station. When a selection is made from the menu, the corresponding OpMode
- * class is instantiated on the Robot Controller and executed.
- *
- * This particular OpMode just executes a basic Tank Drive Teleop for a two wheeled robot
- * It includes all the skeletal structure that all linear OpModes contain.
- *
- * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
- * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
- */
+    // BEGIN Hardware Definitions
+    private final Motor FLMotor = hardwareMap.get(Motor.class, "FLMotor");
+    private final Motor FRMotor = hardwareMap.get(Motor.class, "FRMotor");
+    private final Motor RLMotor = hardwareMap.get(Motor.class, "RLMotor");
+    private final Motor RRMotor = hardwareMap.get(Motor.class, "RRMotor");
+    private final Motor XSlideMotor = hardwareMap.get(Motor.class, "XSlideMotor");
+    private final Motor ZSlideMotor = hardwareMap.get(Motor.class, "ZSlideMotor");
+    private final Servo wristServo = hardwareMap.get(Servo.class, "wristServo");
+    private final Servo clawServo = hardwareMap.get(Servo.class, "clawServo");
 
-@TeleOp(name="OpModeDiagram", group="Linear OpMode")
-public class LinearOpMode extends com.qualcomm.robotcore.eventloop.opmode.LinearOpMode {
+    // BEGIN Software Definitions
+    private final PIDController zSlideMotorPID = new PIDController(0, 0, 0);
+    private final MecanumDrive mecanum = new MecanumDrive(FLMotor, FRMotor, RLMotor, RRMotor);
+    private final XArm xArm = new XArm(XSlideMotor);
+    private final ZArm zArm = new ZArm(ZSlideMotor, zSlideMotorPID);
+    private final Claw claw = new Claw(wristServo, clawServo);
 
+    // BEGIN Code
     @Override
     public void runOpMode() {
-
-        Servo servo = hardwareMap.get(Servo.class, "testServo");
-        TouchSensor touchSensor = hardwareMap.get(TouchSensor.class, "touch");
 
         waitForStart();
 
         while (opModeIsActive()) {
-            if (touchSensor.isPressed()) {
-                servo.setPosition(0.0);
-            } else {
-                servo.setPosition(1.0);
-            }
 
             telemetry.addData("Info", "No Telemetry Data Available");
             telemetry.update();
